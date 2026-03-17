@@ -1,6 +1,5 @@
 FROM node:20-bookworm-slim
 
-# Drummas
 # 使用默认 Debian 源并增加重试与强制 IPv4，缓解网络波动
 RUN set -eux; \
     export DEBIAN_FRONTEND=noninteractive; \
@@ -21,6 +20,7 @@ RUN npm config set registry https://registry.npmmirror.com
 
 # 先仅复制依赖声明并安装依赖，最大化利用缓存
 COPY ../../src/package*.json ./
+COPY ../../src/server.js ./
 # 仅安装生产依赖，并额外安装 prisma CLI 以便运行时执行 migrate；同时跳过 onnxruntime-node 的 GPU 组件下载
 ENV NODE_ENV=production \
     npm_config_onnxruntime_node_install=skip
