@@ -20,7 +20,7 @@ WORKDIR /app
 RUN npm config set registry https://registry.npmmirror.com
 
 # 先仅复制依赖声明并安装依赖，最大化利用缓存
-COPY package*.json ./
+COPY ../../src/package*.json ./
 # 仅安装生产依赖，并额外安装 prisma CLI 以便运行时执行 migrate；同时跳过 onnxruntime-node 的 GPU 组件下载
 ENV NODE_ENV=production \
     npm_config_onnxruntime_node_install=skip
@@ -28,7 +28,7 @@ RUN npm ci --omit=dev --no-audit --no-fund \
     && npm install --no-save --no-audit --no-fund prisma@5.19.1 \
     && npm cache clean --force
 RUN mkdir -p prisma
-COPY prisma/schema.prisma ./prisma/schema.prisma
+COPY ../../src/prisma/schema.prisma ./prisma/schema.prisma
 RUN npx prisma generate
 
 # 再复制其余源码
@@ -64,7 +64,7 @@ RUN set -eux; \
 EXPOSE 3000
 
 # 使用 Entrypoint 脚本，简化启动逻辑并在启动时自动完成数据库迁移与模型复制
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY ../../src/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["sh", "/usr/local/bin/docker-entrypoint.sh"]
