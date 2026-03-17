@@ -28,7 +28,7 @@ RUN npm ci --omit=dev --no-audit --no-fund \
     && npm install --no-save --no-audit --no-fund prisma@5.19.1 \
     && npm cache clean --force
 RUN mkdir -p prisma
-COPY prisma/schema.prisma ./prisma/schema.prisma
+COPY ../../src/prisma/schema.prisma ./prisma/schema.prisma
 RUN npx prisma generate
 
 # 再复制其余源码
