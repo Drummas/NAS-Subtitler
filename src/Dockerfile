@@ -64,7 +64,7 @@ RUN set -eux; \
 EXPOSE 3000
 
 # 使用 Entrypoint 脚本，简化启动逻辑并在启动时自动完成数据库迁移与模型复制
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["sh", "/usr/local/bin/docker-entrypoint.sh"]
